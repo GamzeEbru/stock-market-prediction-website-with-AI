@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#navbarlist {
+    margin-left: 230px;
+}
+
+#pricing {
+    margin-top: 80px
+}
+
+.btnnavbar {
+    width: 150px;
+    background-color: #4783d8;
+    /*grey #1F2937  mavi #5995fd*/
+    border: none;
+    outline: none;
+    height: 49px;
+    border-radius: 49px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.btn:hover {
+    background-color: #4783d8;
+}
+
+@layer base {
+    li {
+        @apply p-4
+    }
+
+    button {
+        @apply text-white border bg-indigo-600 border-indigo-600 rounded-md
+    }
+
+}
