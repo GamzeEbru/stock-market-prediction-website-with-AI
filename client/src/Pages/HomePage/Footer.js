@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 function Footer() {
   return (
     // <div className="absolute bottom-0 w-full left-0">
-    <footer class="p-4 shadow md:flex md:items-center md:justify-between md:p-6 bg-gray-800 -mt-8 -mb-6">
+    <footer class="p-4 shadow md:flex md:items-center md:justify-between md:p-6 bg-gray-800 mt-36">
       <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
         2022 <a href="https://flowbite.com/" class="hover:underline"></a>/ Gamze
         - Ezgi

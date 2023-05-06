@@ -45,7 +45,7 @@ const handleTableRowClick = (tableName) => {
         <div className="relative mt-1">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg
-              className="w-5 h-5 text-gray-500 dark:text-gray-400"
+              className="w-5 h-5 text-gray-500 "
               aria-hidden="true"
               fill="currentColor"
               viewBox="0 0 20 20"
@@ -62,14 +62,13 @@ const handleTableRowClick = (tableName) => {
             type="text"
             id="table-search"
             className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500
-             focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600
-             dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+             focus:border-blue-500 "
             placeholder="Search for items"
           />
         </div>
       </div>
-      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <table className="w-full text-sm text-left text-gray-500">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
           <tr>
             <th scope="col" className="px-6 py-3">
               Makul İsim
@@ -90,11 +89,11 @@ const handleTableRowClick = (tableName) => {
             <tr
               key={index}
               onClick={() => handleTableRowClick(item.tableName)} 
-              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+              className="bg-white border-b hover:bg-gray-50 "
             >
               <td
                 scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
               >
                 {item.tableName}
               </td>
