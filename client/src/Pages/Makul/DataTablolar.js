@@ -6,12 +6,12 @@ import Pagination from "../../components/Pagination/Pagination";
 import Footer from '../HomePage/Footer';
 
 
-function PiyasaTablolar() {
+function DataTablolar() {
   const [tableData, setTableData] = useState([]);
   const navigate = useNavigate();
 
 useEffect(() => {
-  axios.get('http://localhost:3002/piyasa')
+  axios.get('http://localhost:3002/tables')
     .then(response => {
       const newData = response.data.map(table => {
         const tableName = table.tableName.replace('tbl_', '').toUpperCase();
@@ -23,7 +23,7 @@ useEffect(() => {
 }, []);
 
 const handleTableRowClick = (tableName) => {
-  navigate(`/piyasa/${tableName.toLowerCase()}`);
+  navigate(`/tables/${tableName.toLowerCase()}`);
 }
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -120,4 +120,4 @@ const handleTableRowClick = (tableName) => {
   )
 }
 
-export default PiyasaTablolar
+export default DataTablolar

@@ -50,6 +50,11 @@ function Navbar() {
                   Piyasalar
                 </NavLink>
               </li>
+              <li>
+                <NavLink to="/tables" smooth="true" offset={-50} duration={500}>
+                  Borsa Verileri
+                </NavLink>
+              </li>
             </ul>
           </div>
         </div>
