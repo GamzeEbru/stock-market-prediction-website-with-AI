@@ -17,10 +17,10 @@ Sign Up : Mail and password verification is done by Node.js.
 
 #### Exchange DataTable (development)
 
-data is pulled dynamically from database
-![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/assets/table.PNG)
+Data is pulled dynamically from database
+![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/assets/table.png)
 
 #### Detail Page (development)
 
-data is pulled dynamically from database
+Data is pulled dynamically from database
 ![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/assets/grafik.png)
