@@ -23,7 +23,7 @@ function App() {
           <Route path='/account' element={<AccountPage />} />
           <Route path='/tables' element={<DataTablolar />} />
           <Route path='/tables/:tableName' element={<DataDetails />} />
-          <Route path="/piyasa" element={<Piyasa />} />
+          {/* <Route path="/piyasa" element={<Piyasa />} /> */}
           <Route path="/piyasa/:tableName" element={<PiyasaDetails />} />
           
         </Routes>

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import React, { useState } from "react";
-import logo from "../assets/buyuklogo.png";
+import logo from "../assets/Newlogo.png";
 import { Link } from "react-scroll";
 // import { motion } from "framer-motion";
 import "../index.css";
@@ -19,10 +19,10 @@ function Navbar() {
         <div className="flex items-center text-slate-300">
 
 
-          <a href="" className="ml-8 flex items-center">
+          <a href="" className="ml-12 flex items-center">
             <img
               src={logo}
-              className="logo mr-3 h-6  lg:w-56 lg:h-48 sm:h-36"
+              className=" mb-6 lg:w-34 lg:h-24 sm:h-36"
               alt="Logo"
             />
           </a>
@@ -44,11 +44,6 @@ function Navbar() {
                 <Link to="support" smooth="true" offset={-50} duration={500}>
                   Hakkımızda
                 </Link>
-              </li>
-              <li>
-                <NavLink to="/piyasa" smooth="true" offset={-50} duration={500}>
-                  Piyasalar
-                </NavLink>
               </li>
               <li>
                 <NavLink to="/tables" smooth="true" offset={-50} duration={500}>

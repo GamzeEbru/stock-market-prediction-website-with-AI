@@ -19,6 +19,7 @@ const PiyasaDetails = (props) => {
       .get(`http://localhost:3002/piyasa/${tableName}`)
       .then((response) => setData(response.data.slice(1)))
       .catch((error) => console.log(error));
+      console.log(data);
   }, []);
 
   const lastPostIndex = currentPage * postsPerPage;
@@ -59,7 +60,7 @@ const PiyasaDetails = (props) => {
         <div className="relative">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg
-              className="w-5 h-5 text-gray-500 dark:text-gray-400"
+              className="w-5 h-5 text-gray-500"
               aria-hidden="true"
               fill="currentColor"
               viewBox="0 0 20 20"
@@ -88,17 +89,17 @@ const PiyasaDetails = (props) => {
              Tarih
             </th>
             <th scope="col" className="px-6 py-3">
-              Şimdi
-            </th>
-            <th scope="col" className="px-6 py-3">
-                Açılış
+            Açılış
             </th>
             <th scope="col" className="px-6 py-3">
             Yüksek
             </th>
-        
             <th scope="col" className="px-6 py-3">
             Düşük
+            </th>
+            Kapanış
+            <th scope="col" className="px-6 py-3">
+            Hacim
             </th>
         
         
@@ -119,10 +120,11 @@ const PiyasaDetails = (props) => {
               >
                 {row.Tarih}
               </td>
-              <td className="px-6 py-4">{row.Şimdi}</td>
               <td className="px-6 py-4">{row.Açılış}</td>
               <td className="px-6 py-4">{row.Yüksek}</td>
               <td className="px-6 py-4">{row.Düşük}</td>
+              <td className="px-6 py-4">{row.Kapanış}</td>
+              <td className="px-6 py-4">{row.Hacim}</td>
             </tr>
           ))}
         </tbody>
