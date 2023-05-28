@@ -1,65 +1,180 @@
-  const express = require('express');
-  const mysql = require('mysql2');
+const express = require('express');
+const mysql = require('mysql2');
 
-  const cors = require('cors');
-  const app = express();
+const cors = require('cors');
+const app = express();
 
-  app.use(cors({
-    origin: '*'
-  }));
-  
+app.use(cors({
+  origin: '*'
+}));
 
-  const connectionuser = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'bitirme'
+
+const connectionuser = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'bitirme'
+});
+
+const connectiondata = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'bitirme_data',
+  multipleStatements: true
+});
+
+const connectionpiyasa = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'bitirme_piyasa'
+});
+
+
+
+connectiondata.connect((err) => {
+  if (err) throw err;
+  console.log('Connected to MySQL database!');
+});
+
+app.get("/tables/:tableName", (req, res) => {
+  const tableName = req.params.tableName;
+  const realTableName = `tbl_${tableName}`;
+
+  connectiondata.query(`SELECT * FROM ${realTableName}`, (err, results) => {
+    if (err) {
+      console.error('Error fetching data:', err);
+      return;
+    }
+    
+    // Verileri JSON formatında gönder
+    res.send(JSON.stringify(results));
   });
-
-  const connectiondata = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'bitirme_data'
-  });
-
-  const connectionpiyasa = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'bitirme_piyasa'
-  });
+});
 
 
+app.get('/tables', (req, res) => {
+  connectiondata.query('SHOW TABLES', (error, results) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).send('Internal server error');
+    }
+    
+    const tableNames = results.map(result => result[`Tables_in_${connectiondata.config.database}`]);
+    const lastValues = {};
+    let remainingQueries = tableNames.length;
 
-  connectiondata.connect((err) => {
-    if (err) throw err;
-    console.log('Connected to MySQL database!');
-  });
+    tableNames.forEach(tableName => {
+      connectiondata.query(`SELECT Açılış FROM ${tableName} ORDER BY Tarih DESC LIMIT 1`, (error, results) => {
+        if (error) {
+          console.error(error);
+          return res.status(500).send('Internal server error');
+        }
 
-  app.get("/tables/:tableName", (req, res) => {
-    const tableName = req.params.tableName;
-    const realTableName = `tbl_${tableName}`;
+        lastValues[tableName] = results[0].Açılış;
 
-    connectiondata.query(`SELECT * FROM ${realTableName}`, (err, results) => {
-      if (err) {
-        console.error('Error fetching data:', err);
-        return;
-      }
-      
-      // Verileri JSON formatında gönder
-      res.send(JSON.stringify(results));
+        remainingQueries--;
+        if (remainingQueries === 0) {
+          
+          const lastValuesArray = [];
+          tableNames.forEach(tableName => {
+            const lastValueObj = {
+              tableName: tableName,
+              lastValue: lastValues[tableName]
+            };
+            lastValuesArray.push(lastValueObj);
+          });
+          res.send(lastValuesArray);
+
+        }
+      });
     });
   });
+});
 
 
-<<<<<<< Updated upstream
-  app.get('/tables', (req, res) => {
-    connectiondata.query('SHOW TABLES', (error, results) => {
-      if (error) {
-        console.error(error);
-        return res.status(500).send('Internal server error');
-=======
+app.get('/piyasa', (req, res) => {
+  connectionpiyasa.query('SHOW TABLES', (error, results) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).send('Internal server error');
+    }
+    
+    const tableNames = results.map(result => result[`Tables_in_${connectionpiyasa.config.database}`]);
+    const lastValues = {};
+    let remainingQueries = tableNames.length;
+
+    tableNames.forEach(tableName => {
+      connectionpiyasa.query(`SELECT Açılış FROM ${tableName} ORDER BY Tarih DESC LIMIT 1`, (error, results) => {
+        if (error) {
+          console.error(error);
+          return res.status(500).send('Internal server error');
+        }
+
+        lastValues[tableName] = results[0].Açılış;
+
+        remainingQueries--;
+        if (remainingQueries === 0) {
+          
+          const lastValuesArray = [];
+          tableNames.forEach(tableName => {
+            const lastValueObj = {
+              tableName: tableName,
+              lastValue: lastValues[tableName]
+            };
+            lastValuesArray.push(lastValueObj);
+          });
+          res.send(lastValuesArray);
+
+        }
+      });
+    });
+  });
+});
+
+app.get("/piyasa/:tableName", (req, res) => {
+  const tableName = req.params.tableName;
+  const realTableName = `tbl_${tableName}`;
+  
+  connectionpiyasa.query(`SELECT * FROM ${realTableName}`, (err, results) => {
+    if (err) {
+      console.error('Error fetching data:', err);
+      return;
+    }
+    
+    // Verileri JSON formatında gönder
+    res.send(JSON.stringify(results));
+  });
+});
+
+
+
+  app.get ('/scrape/:tableName', async (req, res) => {
+    const tableName = req.params.tableName;
+    const convertedName = tableName.toUpperCase() + ".IS";
+    const databaseTableName = `tbl_${tableName}`;
+    const url = `https://finance.yahoo.com/quote/${convertedName}/`;
+
+    try {
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+      await page.goto(url);
+
+      const elementXPath = '//*[@id="quote-header-info"]/div[3]/div[1]/div/fin-streamer[1]';
+  
+        const text = await page.$x(elementXPath);
+        const anlik = await page.evaluate(el => el.textContent, text[0]);
+        
+        console.log('anlik:', anlik);
+        
+        await browser.close();
+      } catch (error) {
+        console.error('Hata:', error);
+      }
+    });
+
+
       //ÇALIŞAN SON HALİ		
     //tüm tabloların isimlerinin çekilmesi
       //tablolardan her gün saat 6'da veri kazıma
@@ -183,121 +298,57 @@
             }
           });
         }
->>>>>>> Stashed changes
       }
-      
-      const tableNames = results.map(result => result[`Tables_in_${connectiondata.config.database}`]);
-      const lastValues = {};
-      let remainingQueries = tableNames.length;
-
-      tableNames.forEach(tableName => {
-        connectiondata.query(`SELECT Açılış FROM ${tableName} ORDER BY Tarih DESC LIMIT 1`, (error, results) => {
-          if (error) {
-            console.error(error);
-            return res.status(500).send('Internal server error');
-          }
-
-          lastValues[tableName] = results[0].Açılış;
-
-          remainingQueries--;
-          if (remainingQueries === 0) {
-            
-            const lastValuesArray = [];
-            tableNames.forEach(tableName => {
-              const lastValueObj = {
-                tableName: tableName,
-                lastValue: lastValues[tableName]
-              };
-              lastValuesArray.push(lastValueObj);
-            });
-            res.send(lastValuesArray);
-
-          }
-        });
-      });
     });
-  });
-
-
-  app.get('/piyasa', (req, res) => {
-    connectionpiyasa.query('SHOW TABLES', (error, results) => {
-      if (error) {
-        console.error(error);
-        return res.status(500).send('Internal server error');
-      }
-      
-      const tableNames = results.map(result => result[`Tables_in_${connectionpiyasa.config.database}`]);
-      const lastValues = {};
-      let remainingQueries = tableNames.length;
-
-      tableNames.forEach(tableName => {
-        connectionpiyasa.query(`SELECT Açılış FROM ${tableName} ORDER BY Tarih DESC LIMIT 1`, (error, results) => {
-          if (error) {
-            console.error(error);
-            return res.status(500).send('Internal server error');
-          }
-
-          lastValues[tableName] = results[0].Açılış;
-
-          remainingQueries--;
-          if (remainingQueries === 0) {
-            
-            const lastValuesArray = [];
-            tableNames.forEach(tableName => {
-              const lastValueObj = {
-                tableName: tableName,
-                lastValue: lastValues[tableName]
-              };
-              lastValuesArray.push(lastValueObj);
-            });
-            res.send(lastValuesArray);
-
-          }
-        });
-      });
-    });
-  });
-
-  app.get("/piyasa/:tableName", (req, res) => {
-    const tableName = req.params.tableName;
-    const realTableName = `tbl_${tableName}`;
-    
-    connectionpiyasa.query(`SELECT * FROM ${realTableName}`, (err, results) => {
-      if (err) {
-        console.error('Error fetching data:', err);
-        return;
-      }
-      
-      // Verileri JSON formatında gönder
-      res.send(JSON.stringify(results));
-    });
-  });
-
-
-
-  function checkTime() {
-    var now = new Date();
-    if (now.getHours() == 13 && now.getMinutes() == 30) {
-      connection.query('SELECT * FROM mytable', function (error, results, fields) {
-        if (error) throw error;
-        console.log('Results: ', results);
-      });
-    }
+  } catch (error) {
+    console.error(`"${tableName}" tablosu için hata:`, error);
+  }
   }
 
-  setInterval(checkTime, 600000); //60000 = 1 minute
 
-  app.get('/predictData', (req, res) => {
-    connectiondata.query('SELECT * FROM tbl_predict', (error, results) => {
-      if (error) {
-        console.error(error);
-        return res.status(500).send('Internal server error');
-      }
-      res.send(results);
+    // Tablo isimlerini getiren fonksiyon
+    async function getTableNames() {
+    return new Promise((resolve, reject) => {
+      connectiondata.query('SHOW TABLES', (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          const tableNames = results.map(row => {
+            const tableName = Object.values(row)[0];
+            return tableName.replace('tbl_', ''); // "tbl_" kısmını kaldır
+          });
+          resolve(tableNames);
+        }
+      });
     });
-  });
+    }
+
+      // Tarihi formatlayan fonksiyon
+      function formatDate(dateString) {
+      const months = {
+        January: '01',
+        February: '02',
+        March: '03',
+        April: '04',
+        May: '05',
+        June: '06',
+        July: '07',
+        August: '08',
+        September: '09',
+        October: '10',
+        November: '11',
+        December: '12'
+      };
+
+      const tarihParts = dateString.split(' ');
+      const month = months[tarihParts[0]];
+      const day = tarihParts[1].replace(',', '');
+      const year = tarihParts[2];
+      const formattedTarih = `${year}-${month}-${day}`;
+
+      return formattedTarih;
+      }
 
 
-
-app.listen(3002, () => console.log('Server started on port 3002'));
+      app.listen(3002, () => console.log('Server started on port 3002'));
 
