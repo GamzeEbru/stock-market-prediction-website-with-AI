@@ -53,11 +53,137 @@
   });
 
 
+<<<<<<< Updated upstream
   app.get('/tables', (req, res) => {
     connectiondata.query('SHOW TABLES', (error, results) => {
       if (error) {
         console.error(error);
         return res.status(500).send('Internal server error');
+=======
+      //ÇALIŞAN SON HALİ		
+    //tüm tabloların isimlerinin çekilmesi
+      //tablolardan her gün saat 6'da veri kazıma
+      //verileri veritabanına yazma işlemleri
+
+
+    // Gerekli modüllerin import edilmesi
+    const cron = require('node-cron');
+    const puppeteer = require('puppeteer');
+
+    // Express uygulamasının oluşturulması
+
+    app.use(express.json());
+
+    // Veritabanı bağlantısı
+
+    // Veri güncellendi uyarısı için bir nesne
+    const updatedData = {};
+
+    // POST isteği ile veri kazıma endpoint'inin tanımlanması
+    app.post('/scrape-database/:tableName', async (req, res) => {
+    const tableName = req.params.tableName;
+
+    try {
+      await scrapeDatabase(tableName);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Hata:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+    });
+
+    // Her gün saat 18.00'da veri kazıma işlemini başlatan cron job'ın tanımlanması
+    cron.schedule('00 18 * * *', async () => {
+    try {
+      const tableNames = await getTableNames();
+      for (const tableName of tableNames) {
+        try {
+          await scrapeDatabase(tableName);
+          console.log(`"${tableName}" tablosu için veri kazıma işlemi tamamlandı.`);
+        } catch (error) {
+          console.error(`"${tableName}" tablosu için hata:`, error);
+        }
+      }
+    } catch (error) {
+      console.error('Hata var:', error);
+    }
+    });
+
+  // Veri kazıma fonksiyonu
+  async function scrapeDatabase(tableName) {
+  const convertedName = tableName.toUpperCase() + ".IS";
+  const databaseTableName = `tbl_${tableName}`;
+
+  const url = `https://finance.yahoo.com/quote/${convertedName}/history?p=B${convertedName}`;
+
+  try {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(url);
+
+    await page.waitForNavigation();  // Sayfanın tamamen yüklenmesini bekleyin
+
+    const tarihXPath = '//*[@id="Col1-1-HistoricalDataTable-Proxy"]/section/div[2]/table/tbody/tr[1]/td[1]/span';
+    const açılışXPath = '//*[@id="Col1-1-HistoricalDataTable-Proxy"]/section/div[2]/table/tbody/tr[1]/td[2]/span';
+    const yüksekXPath = '//*[@id="Col1-1-HistoricalDataTable-Proxy"]/section/div[2]/table/tbody/tr[1]/td[3]/span';
+    const düşükXPath = '//*[@id="Col1-1-HistoricalDataTable-Proxy"]/section/div[2]/table/tbody/tr[1]/td[4]/span';
+    const kapanışXPath = '//*[@id="Col1-1-HistoricalDataTable-Proxy"]/section/div[2]/table/tbody/tr[1]/td[5]/span';
+    const adjcloseXPath = '//*[@id="Col1-1-HistoricalDataTable-Proxy"]/section/div[2]/table/tbody/tr[1]/td[6]/span';
+    const hacimXPath = '//*[@id="Col1-1-HistoricalDataTable-Proxy"]/section/div[2]/table/tbody/tr[1]/td[7]/span';
+
+    const tarihElementHandle = await page.$x(tarihXPath);
+    const açılışElementHandle = await page.$x(açılışXPath);
+    const yüksekElementHandle = await page.$x(yüksekXPath);
+    const düşükElementHandle = await page.$x(düşükXPath);
+    const kapanışElementHandle = await page.$x(kapanışXPath);
+    const adjcloseElementHandle = await page.$x(adjcloseXPath);
+    const hacimElementHandle = await page.$x(hacimXPath);
+
+
+    //Value değerlerini al
+    const tarihValue = await page.evaluate(el => el.textContent, tarihElementHandle[0]);
+    const açılışValue = await page.evaluate(el => el.textContent, açılışElementHandle[0]);
+    const yüksekValue = await page.evaluate(el => el.textContent, yüksekElementHandle[0]);
+    const düşükValue = await page.evaluate(el => el.textContent, düşükElementHandle[0]);
+    const kapanışValue = await page.evaluate(el => el.textContent, kapanışElementHandle[0]);
+    const adjcloseValue = await page.evaluate(el => el.textContent, adjcloseElementHandle[0]);
+    const hacimValue = await page.evaluate(el => el.textContent, hacimElementHandle[0]);
+
+    const hacimValueWithoutCommas = hacimValue.replace(/,/g, '');
+    const hacimIntValue = parseInt(hacimValueWithoutCommas);
+
+    await browser.close();
+
+    const formattedTarih = formatDate(tarihValue);
+    // const query = `INSERT INTO ${databaseTableName} (Tarih, Açılış, Yüksek, Düşük, Kapanış, AdjClose, Hacim) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    // const values = [formattedTarih, açılışValue, yüksekValue, düşükValue, kapanışValue, adjcloseValue, hacimIntValue];
+
+    const checkQuery = `SELECT COUNT(*) AS count FROM ${databaseTableName} WHERE Tarih = ?`;
+    const checkValues = [formattedTarih];
+    
+    connectiondata.query(checkQuery, checkValues, (error, results) => {
+      if (error) {
+        console.error('Hata:', error);
+      } else {
+        const rowCount = results[0].count;
+        if (rowCount > 0) {
+          // Veri güncellendi uyarısı için kontrol
+          updatedData[tableName] = true;
+          console.log(`"${tableName}" tablosunda güncelleme yapıldı.`);
+        } else {
+          // Yeni veri ekleme işlemi
+          const insertQuery = `INSERT INTO ${databaseTableName} (Tarih, Açılış, Yüksek, Düşük, Kapanış, AdjClose, Hacim) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+          const insertValues = [formattedTarih, açılışValue, yüksekValue, düşükValue, kapanışValue, adjcloseValue, hacimIntValue];
+    
+          connectiondata.query(insertQuery, insertValues, (insertError, insertResults) => {
+            if (insertError) {
+              console.error('Hata:', insertError);
+            } else {
+              console.log(`"${tableName}" tablosu için veri eklendi.`);
+            }
+          });
+        }
+>>>>>>> Stashed changes
       }
       
       const tableNames = results.map(result => result[`Tables_in_${connectiondata.config.database}`]);
