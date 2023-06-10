@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../../components/Navbar'
+import Navbar from '../../components/PageNavbar'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Pagination from "../../components/Pagination/Pagination";
@@ -32,7 +32,14 @@ const handleTableRowClick = (tableName) => {
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts =  tableData.slice(firstPostIndex, lastPostIndex);
-
+  function formatDecimal(value) {
+    const parsedValue = parseFloat(value);
+    if (!isNaN(parsedValue)) {
+      return parsedValue.toFixed(2);
+    } else {
+      return value; // Değer sayısal bir değilse aynı şekilde döndür
+    }
+  }
   return (
     <>
     <Navbar/>  
@@ -74,10 +81,10 @@ const handleTableRowClick = (tableName) => {
               Makul İsim
             </th>
             <th scope="col" className="px-6 py-3">
-              Anlık Değer
+              Açılış Değeri
             </th>
             <th scope="col" className="px-6 py-3">
-                Details
+                Tahmini Kapanış
             </th>
         
           </tr>
@@ -97,7 +104,7 @@ const handleTableRowClick = (tableName) => {
               >
                 {item.tableName}
               </td>
-              <td className="px-6 py-4">{item.lastValue}</td>
+              <td className="px-6 py-4">{formatDecimal(item.lastValue)}</td>
             </tr>
           ))}
 

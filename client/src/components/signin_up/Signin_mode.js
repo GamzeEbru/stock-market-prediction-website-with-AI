@@ -234,7 +234,7 @@ function Signin_mode() {
             <div className="text-slider">
               <div className="text-wrap">
                 <div className="text-group">
-                  <h2>Create your own courses</h2>
+                  <h2>Create your own account</h2>
                   <h2>Customize as you like</h2>
                   <h2>Invite students to your className</h2>
                 </div>

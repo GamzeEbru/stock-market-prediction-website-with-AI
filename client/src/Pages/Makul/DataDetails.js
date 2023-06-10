@@ -1,7 +1,7 @@
 //datadetails.js
 import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/PageNavbar";
 import Footer from "../HomePage/Footer";
 import axios from "axios";
 import Pagination from "../../components/Pagination/Pagination";
@@ -37,6 +37,7 @@ const DataDetails = (props) => {
     const dateObj = new Date(dateString);
     return dateObj.toLocaleDateString();
   }; 
+
   function formatDecimal(value) {
     const parsedValue = parseFloat(value);
     if (!isNaN(parsedValue)) {
@@ -242,7 +243,7 @@ const DataDetails = (props) => {
                   <td className="px-6 py-4">{formatDecimal(row.Tahmin)}</td>
                 </tr>
               ))}
-</tbody>              
+          </tbody>              
             </table>
 
             <div className="mt-2 mb-6">

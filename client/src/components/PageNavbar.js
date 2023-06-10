@@ -5,7 +5,7 @@ import { Link } from "react-scroll";
 // import { motion } from "framer-motion";
 import "../index.css";
 
-function Navbar() {
+function PageNavbar() {
   const [nav, setNav] = useState(false);
   const handleClick = () => setNav(!nav);
   const handleClose = () => setNav(!nav);
@@ -36,14 +36,14 @@ function Navbar() {
                 </NavLink>
               </li>
               <li>
-                <Link to="about" smooth="true" offset={-200} duration={500}>
+                <NavLink to="/dailydata" smooth="true" offset={-200} duration={500}>
                   Günlük Veriler
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to="support" smooth="true" offset={-50} duration={500}>
+                <NavLink to="/about" smooth="true" offset={-50} duration={500}>
                   Hakkımızda
-                </Link>
+                </NavLink>
               </li>
               <li>
                 <NavLink to="/tables" smooth="true" offset={-50} duration={500}>
@@ -93,20 +93,20 @@ function Navbar() {
       </div>
       <ul className={!nav ? "hidden" : "absolute bg-zinc-200 w-full px-8"}>
         <li className="border-b-2 border-zinc-300 w-full">
-          <Link onClick={handleClose} to="home" smooth={true} duration={500}>
+          <NavLink onClick={handleClose} to="/" smooth={true} duration={500}>
             AnaSayfa
-          </Link>
+          </NavLink>
         </li>
         <li className="border-b-2 border-zinc-300 w-full">
-          <Link
+          <NavLink
             onClick={handleClose}
-            to="about"
+            to="/dailydata"
             smooth={true}
             offset={-200}
             duration={500}
           >
             Günlük Veriler
-          </Link>
+          </NavLink>
         </li>
         <li className="border-b-2 border-zinc-300 w-full">
           <NavLink
@@ -143,4 +143,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default PageNavbar;

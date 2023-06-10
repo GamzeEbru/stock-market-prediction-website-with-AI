@@ -2,13 +2,13 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Main from "../src/components/Main";
 import Signin_mode from "../src/components/signin_up/Signin_mode";
-import Piyasa from "../src/Pages/Makul/Piyasa";
 import Contact from "../src/Pages/FooterItems/Contact";
 import AboutUs from "../src/Pages/FooterItems/AboutUs";
 import AccountPage from "./Pages/Account/AccountPage";
 import DataTablolar from './Pages/Makul/DataTablolar';
 import DataDetails from './Pages/Makul/DataDetails';
 import PiyasaDetails from './Pages/Makul/PiyasaDetails';
+import DailyData from './components/DailyData';
 
 
 function App() {
@@ -25,6 +25,7 @@ function App() {
           <Route path='/tables/:tableName' element={<DataDetails />} />
           {/* <Route path="/piyasa" element={<Piyasa />} /> */}
           <Route path="/piyasa/:tableName" element={<PiyasaDetails />} />
+          <Route path="/dailydata" element={<DailyData />} />
           
         </Routes>
       </Router>
