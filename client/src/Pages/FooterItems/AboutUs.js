@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Logo  from '../../assets/Newlogo.png';
+import Logo  from '../../assets/LastLogoBlack.png';
 import './AboutUs.css';
 import Navbar from '../../components/Navbar';
 
@@ -16,7 +16,8 @@ const AboutUs = () => {
         transition={{ duration: 0.5 }}
         className="logo-container"
       >
-        <img src={Logo} alt="Logoo" className="logo" />
+        
+        <img src={Logo} alt="Logoo" className="logo"    />
       </motion.div>
       <motion.div
         initial={{ opacity: 0, y: 50 }}

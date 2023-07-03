@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import React, { useState } from "react";
-import logo from "../assets/Newlogo.png";
+import logo from "../assets/LastLogo.png";
 import { Link } from "react-scroll";
 // import { motion } from "framer-motion";
 import "../index.css";
@@ -22,14 +22,14 @@ function PageNavbar() {
           <a href="" className="ml-12 flex items-center">
             <img
               src={logo}
-              className=" mb-6 lg:w-34 lg:h-24 sm:h-36"
+              className=" lg:w-54 lg:h-64 sm:h-36"
               alt="Logo"
             />
           </a>
           <div id="navbarlist">
 
 
-            <ul className="ml-center hidden md:flex">
+            <ul className="ml-center hidden md:flex ml-40">
               <li>
                 <NavLink to="/" smooth="true" duration={500}>
                   AnaSayfa
@@ -55,7 +55,7 @@ function PageNavbar() {
         </div>
         <div className="  hidden md:flex pr-4">
           <button className="btnnavbar px-8 py-3 ">
-            <NavLink to="/login">Login</NavLink>
+            <NavLink to="/login">Kayıt ol</NavLink>
           </button>
         </div>
 
