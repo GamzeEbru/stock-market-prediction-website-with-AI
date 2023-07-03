@@ -8,7 +8,7 @@ I pulled stock market data of the last 5 years via API. I aimed to make future p
 
 Sign In : Registering to mysql database in xampserver.
 Sign Up : Mail and password verification is done by Node.js.
-![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/img/login%20page.gif)
+![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/img/loginPage.gif)
 
 #### Homepage
 
