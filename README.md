@@ -19,8 +19,3 @@ Sign Up : Mail and password verification is done by Node.js.
 
 Data is pulled dynamically from database, forecast data started to be added to the database, daily data is added.
 ![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/img/Detail.gif)
-
-#### Detail Page (development)
-
-Data is pulled dynamically from database
-![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/img/Detail.gif)
