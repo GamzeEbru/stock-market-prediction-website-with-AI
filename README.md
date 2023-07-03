@@ -12,15 +12,15 @@ Sign Up : Mail and password verification is done by Node.js.
 
 #### Homepage
 
-![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/img/bitirme.PNG)
-![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/img/b5.PNG)
+![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/img/Homepage.png)
+![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/img/Ekran%20Resmi%202023-07-03%2020.04.57.png)
 
-#### Exchange DataTable (development)
+#### Exchange DataTable
 
-Data is pulled dynamically from database
-![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/assets/table.png)
+Data is pulled dynamically from database, forecast data started to be added to the database, daily data is added.
+![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/img/Detail.gif)
 
 #### Detail Page (development)
 
 Data is pulled dynamically from database
-![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/assets/grafik.png)
+![](https://github.com/GamzeEbru/Engineering-Graduation-Project/blob/main/client/src/img/Detail.gif)
